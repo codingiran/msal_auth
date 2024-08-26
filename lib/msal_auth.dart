@@ -30,7 +30,7 @@ class MsalAuth {
       if (Platform.isAndroid) {
         assert(androidConfig != null, 'Android config can not be null');
         final config =
-            await rootBundle.loadString(androidConfig!.configFilePath);
+        await rootBundle.loadString(androidConfig!.configFilePath);
         final map = json.decode(config) as Map<String, dynamic>;
         map['client_id'] = clientId;
         if (androidConfig.tenantId != null) {
@@ -51,6 +51,7 @@ class MsalAuth {
           'authMiddleware': iosConfig.authMiddleware.name,
           'tenantType': iosConfig.tenantType.name,
           'loginHint': loginHint,
+          'prefersEphemeralWebBrowserSession': iosConfig.prefersEphemeralWebBrowserSession
         };
       }
 
@@ -87,7 +88,7 @@ class MsalAuth {
         await _methodChannel.invokeMethod('loadAccounts');
       }
       final json =
-          await _methodChannel.invokeMethod('acquireTokenSilent', arguments);
+      await _methodChannel.invokeMethod('acquireTokenSilent', arguments);
       if (json != null) {
         return MsalUser.fromJson(jsonDecode(json));
       }

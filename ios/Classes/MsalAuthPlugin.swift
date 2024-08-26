@@ -8,6 +8,7 @@ public class MsalAuthPlugin: NSObject, FlutterPlugin {
     static var authMiddleware: String = ""
     static var tenantType: String = ""
     static var loginHint: String = ""
+    static var prefersEphemeralWebBrowserSession: Bool = false
     
     static let kCurrentAccountIdentifier = "MSALCurrentAccountIdentifier"
     
@@ -26,9 +27,10 @@ public class MsalAuthPlugin: NSObject, FlutterPlugin {
         let authMiddleware = dict["authMiddleware"] as? String ?? ""
         let tenantType = dict["tenantType"] as? String ?? ""
         let loginHint = dict["loginHint"] as? String ?? ""
-        
+        let prefersEphemeralWebBrowserSession = dict["prefersEphemeralWebBrowserSession"] as? Bool ?? false
+
         switch call.method {
-        case "initialize": initialize(clientId: clientId, authority: authority, authMiddleware: authMiddleware, tenantType: tenantType, loginHint: loginHint, result: result)
+        case "initialize": initialize(clientId: clientId, authority: authority, authMiddleware: authMiddleware, tenantType: tenantType, loginHint: loginHint, prefersEphemeralWebBrowserSession: prefersEphemeralWebBrowserSession, result: result)
         case "acquireToken": acquireToken(scopes: scopes, result: result)
         case "acquireTokenSilent": acquireTokenSilent(scopes: scopes, result: result)
         case "logout": logout(result: result)
@@ -58,7 +60,7 @@ public class MsalAuthPlugin: NSObject, FlutterPlugin {
         return nil
     }
     
-    private func initialize(clientId: String, authority: String, authMiddleware: String, tenantType: String, loginHint: String, result: @escaping FlutterResult) {
+    private func initialize(clientId: String, authority: String, authMiddleware: String, tenantType: String, loginHint: String, prefersEphemeralWebBrowserSession: Bool, result: @escaping FlutterResult) {
         // validate clientId
         if clientId.isEmpty {
             result(FlutterError(code: "AUTH_ERROR", message: "Call must include a clientId", details: nil))
@@ -70,6 +72,7 @@ public class MsalAuthPlugin: NSObject, FlutterPlugin {
         MsalAuthPlugin.authMiddleware = authMiddleware
         MsalAuthPlugin.tenantType = tenantType
         MsalAuthPlugin.loginHint = loginHint
+        MsalAuthPlugin.prefersEphemeralWebBrowserSession = prefersEphemeralWebBrowserSession
         if authMiddleware != "msAuthenticator" {
             MSALGlobalConfig.brokerAvailability = .none
         }
@@ -85,7 +88,7 @@ extension MsalAuthPlugin {
             guard let viewController = UIViewController.keyViewController else { return }
             let webViewParameters = MSALWebviewParameters(authPresentationViewController: viewController)
             if #available(iOS 13.0, *) {
-                webViewParameters.prefersEphemeralWebBrowserSession = true
+                webViewParameters.prefersEphemeralWebBrowserSession = MsalAuthPlugin.prefersEphemeralWebBrowserSession
                 webViewParameters.webviewType = {
                     let authMiddleware = MsalAuthPlugin.authMiddleware
                     switch authMiddleware {
