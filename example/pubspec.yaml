@@ -2,6 +2,8 @@ name: msal_auth_example
 description: "Demonstrates how to use the msal_auth plugin."
 publish_to: 'none'
 
+version: 1.0.0+10
+
 environment:
   sdk: '>=3.3.0 <4.0.0'
 

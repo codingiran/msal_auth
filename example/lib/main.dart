@@ -15,10 +15,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _clientId = '<CLIENT_ID>';
-  final _tenantId = '<TENANT_ID>';
-  late final _authority =
-      'https://login.microsoftonline.com/$_tenantId/oauth2/v2.0/authorize';
+  final _clientId = 'a7b58e99-7c8f-4b77-af9c-6430f5b8bc24';
+  final _tenantId = 'common';
+  late final _authority = 'https://login.microsoftonline.com/$_tenantId/oauth2/v2.0/authorize';
   final _scopes = <String>[
     'https://graph.microsoft.com/user.read',
     // Add other scopes here if required.
@@ -64,7 +63,7 @@ class _MyAppState extends State<MyApp> {
         configFilePath: 'assets/msal_config.json',
         tenantId: _tenantId,
       ),
-      iosConfig: IosConfig(authority: _authority),
+      iosConfig: IosConfig(authority: _authority, authMiddleware: AuthMiddleware.authenticationSession),
     );
   }
 

@@ -9,10 +9,14 @@ class IosConfig {
   /// The type of tenant to authenticate against.
   final TenantType tenantType;
 
+  /// A Boolean value that indicates whether the ASWebAuthenticationSession should ask the browser for a private authentication session.
+  final bool prefersEphemeralWebBrowserSession;
+
   IosConfig({
     required this.authority,
     this.authMiddleware = AuthMiddleware.msAuthenticator,
     this.tenantType = TenantType.entraIDAndMicrosoftAccount,
+    this.prefersEphemeralWebBrowserSession = false,
   });
 }
 
@@ -23,6 +27,9 @@ enum AuthMiddleware {
 
   /// Safari browser will be used.
   safariBrowser,
+
+  /// Use ASWebAuthenticationSession where available.
+  authenticationSession,
 
   /// WebView will be used.
   webView
