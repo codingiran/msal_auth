@@ -361,7 +361,7 @@ extension MsalAuthPlugin {
 extension UIViewController {
     static var keyViewController: UIViewController? {
         if #available(iOS 15, *) {
-            return (UIApplication.shared.connectedScenes.filter { $0.activationState == .foregroundActive }.compactMap { $0 as? UIWindowScene }.first?.windows.filter { $0.isKeyWindow }.first?.rootViewController)!
+            return UIApplication.shared.connectedScenes.filter { $0.activationState == .foregroundActive }.compactMap { $0 as? UIWindowScene }.first?.windows.filter { $0.isKeyWindow }.first?.rootViewController
         } else {
             return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController
         }
