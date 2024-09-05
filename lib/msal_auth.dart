@@ -29,13 +29,11 @@ class MsalAuth {
 
       if (Platform.isAndroid) {
         assert(androidConfig != null, 'Android config can not be null');
-        final config =
-        await rootBundle.loadString(androidConfig!.configFilePath);
+        final config = await rootBundle.loadString(androidConfig!.configFilePath);
         final map = json.decode(config) as Map<String, dynamic>;
         map['client_id'] = clientId;
         if (androidConfig.tenantId != null) {
-          map['authorities'][0]['audience']['tenant_id'] =
-              androidConfig.tenantId;
+          map['authorities'][0]['audience']['tenant_id'] = androidConfig.tenantId;
         }
 
         final directory = await getApplicationDocumentsDirectory();
@@ -43,15 +41,15 @@ class MsalAuth {
         await file.writeAsBytes(utf8.encode(json.encode(map)));
 
         arguments = {'configFilePath': file.path};
-      } else if (Platform.isIOS) {
-        assert(iosConfig != null, 'iOS config can not be null');
+      } else if (Platform.isIOS || Platform.isMacOS) {
+        assert(iosConfig != null, '${Platform.isIOS ? 'iOS' : 'macOS'} config can not be null');
         arguments = <String, dynamic>{
           'clientId': clientId,
           'authority': iosConfig!.authority,
           'authMiddleware': iosConfig.authMiddleware.name,
           'tenantType': iosConfig.tenantType.name,
           'loginHint': loginHint,
-          'prefersEphemeralWebBrowserSession': iosConfig.prefersEphemeralWebBrowserSession
+          'prefersEphemeralWebBrowserSession': iosConfig.prefersEphemeralWebBrowserSession,
         };
       }
 
@@ -87,8 +85,7 @@ class MsalAuth {
       if (Platform.isAndroid) {
         await _methodChannel.invokeMethod('loadAccounts');
       }
-      final json =
-      await _methodChannel.invokeMethod('acquireTokenSilent', arguments);
+      final json = await _methodChannel.invokeMethod('acquireTokenSilent', arguments);
       if (json != null) {
         return MsalUser.fromJson(jsonDecode(json));
       }
