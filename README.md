@@ -2,7 +2,7 @@
 
 Microsoft Authentication 🔐 Library for Flutter.
 
-`msal_auth` plugin provides Microsoft authentication in Android and iOS devices using native MSAL library. This is very straightforward and easy to use.
+`msal_auth` plugin provides Microsoft authentication in Android and iOS and maOS devices using native MSAL library. This is very straightforward and easy to use.
 
 ## Features 🚀
 
@@ -32,7 +32,7 @@ To implement `MSAL` in `Flutter`, You need to setup an app in `Azure Portal` and
 
   ![Azure Dashboard](/Screenshots/Azure-Dashboard.png)
 
-- Now You need to add `Android` and `iOS` platform specific configuration in Azure portal. to do that, go to `Manage > Authentication > Add platform`.
+- Now You need to add `Android` and `iOS` and `macOS` platform specific configuration in Azure portal. to do that, go to `Manage > Authentication > Add platform`.
   
 ### Android Setup - Azure portal
 
@@ -178,7 +178,7 @@ final msalAuth = await MsalAuth.createPublicClientApplication(
 ```
 - To modify value of `authority` in `iOS`, follow [Configure iOS authority].
 
-- in `iOS`, if middleware is `AuthMiddleware.msAuthenticator` and `Authenticator` app is not installed on a device, It will use `Safari Browser` for authentication.
+- in `iOS` and `macOS`, if middleware is `AuthMiddleware.msAuthenticator` and `Authenticator` app is not installed on a device, It will use `Safari Browser` for authentication.
 
 - By default login will be attempted against an Entra ID (formerly Azure Active Directory) tenant which also supports Microsoft Account logins. To login to an Azure AD B2C tenant instead, set the `tenantType` value to `TenantType.azureADB2C`.
 
